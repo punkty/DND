@@ -1,7 +1,7 @@
 let charList = document.querySelector('.charList') 
 let form = document.getElementById("addPlayerForm")
 let currCharacters = []
-let uniqueIndex = 0
+let uniqueId = 0
 
 function Player(){
     this.name
@@ -11,15 +11,16 @@ function Player(){
     this.initiative
     this.hpUp = () => {
         this.health += 1
-        healthDisplay = document.querySelector(`span[data-index="${this.index}"]`)
+        healthDisplay = document.querySelector(`span[data-index="${this.id}"]`)
         healthDisplay.textContent = `${this.health}`
     }
     this.hpDown = () => {
         this.health -= 1
-        healthDisplay = document.querySelector(`span[data-index="${this.index}"]`)
+        healthDisplay = document.querySelector(`span[data-index="${this.id}"]`)
         healthDisplay.textContent = `${this.health}`
     }
 }
+
 
 function fillForm(){
     form.elements[0].value = "Test"
@@ -33,16 +34,16 @@ function addPlayer(){
     if(!form.elements[0].value ||!form.elements[1].value || !form.elements[2].value || !form.elements[3].value){ return }
     let portrait
     if(form.elements[0].value == "MONSTERS"){
-        portrait = "resources/img/1.bmp"
+        portrait = "img/1.bmp"
     } else {
-        portrait =  `resources/img/${randomInt(2,40)}.bmp`
+        portrait =  `img/${randomInt(2,40)}.bmp`
     }
     hero.name = form.elements[0].value
     hero.health = Number(form.elements[1].value)
     hero.maxHealth = Number(form.elements[1].value)
     hero.armorClass = Number(form.elements[2].value)
     hero.initiative = Number(form.elements[3].value)
-    hero.index = uniqueIndex
+    hero.id = uniqueId
     // let heroCard = `
     //     <section class="character">
     //         <img src='${portrait}' alt="${hero.name}"/>
@@ -60,7 +61,7 @@ function addPlayer(){
     // Create new character card with styling class
     let heroCard = document.createElement('section')
     heroCard.classList.add('character')
-    heroCard.setAttribute('data-index', hero.index)
+    heroCard.setAttribute('data-index', hero.id)
 
     // Create and add randomly generated portrait to card
     let cardPortrait = document.createElement('img')
@@ -75,15 +76,21 @@ function addPlayer(){
     heroCard.appendChild(cardName)
 
     let cardHealth = document.createElement('span')
-    cardHealth.setAttribute('data-index', hero.index)
+    cardHealth.setAttribute('data-index', hero.id)
 
-    hero.healthElement = cardHealth 
-    cardHealth.textContent= hero.health
+    let cardMaxHealth = document.createElement('span')
+    cardHealth.setAttribute('data-index', hero.id)
+
+    hero.healthElement = cardHealth
+    hero.maxHealthElement = cardMaxHealth
+
+    cardHealth.textContent = hero.health
+    cardMaxHealth.textContent = ` / ${hero.maxHealth}`
     
     let healthContainer = document.createElement('p')
     healthContainer.appendChild(cardHealth)
     // healthContainer.textContent +=  " / " + hero.maxHealth
-    
+    healthContainer.appendChild(cardMaxHealth)
 
     // Create and add HP buttons to card
     let hpUpButton = document.createElement('button')
@@ -92,16 +99,19 @@ function addPlayer(){
     hpUpButton.addEventListener('click', hero.hpUp.bind(hero))
     heroCard.appendChild(hpUpButton);
     heroCard.appendChild(healthContainer)
+
     let hpDownButton = document.createElement('button')
     hpDownButton.classList.add('hpButton')
-    
-
+    hpDownButton.textContent = "-"
+    hpDownButton.classList.add('hpButton')
+    hpDownButton.addEventListener('click', hero.hpDown.bind(hero))
+    heroCard.appendChild(hpDownButton)
     // console.log(heroCard)
     // charList.insertAdjacentHTML("beforebegin", heroCard)
     charList.appendChild(heroCard)
     currCharacters.push(hero)
     form.reset()
-    uniqueIndex += 1
+    uniqueId += 1
     // console.log(currCharacters)
 }
 
