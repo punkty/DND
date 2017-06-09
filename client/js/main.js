@@ -21,6 +21,9 @@ function Player(){
     }
 }
 
+function updateRecieved(data){
+    console.log(data)
+}
 
 function fillForm(){
     form.elements[0].value = "Test"
