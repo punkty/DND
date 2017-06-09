@@ -1,0 +1,48 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 200;
+}
+html {
+    /*background: url(../images/11.jpg) no-repeat center center fixed;*/
+    background-color: #0e0e0e;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+main {
+    margin: 30px auto;
+    max-width: 900px;
+}
+
+#addPlayerForm {
+    width: 234px;
+    text-align: right;
+}
+h1,label,p {
+    color: #fffff0;
+}
+
+#addPlayerForm >input[type="text"],
+#addPlayerForm > input[type="number"]{
+    margin: 6px;
+}
+
+.character {
+    display: inline-block;
+    border: solid snow 1px;
+}
+.character > p {
+    margin: 3px 5px;
+}
+.charName {
+    color: gold;
+    
+}
+.mod {
+    display: block;
+    width: 90px;
+    margin: 2px 8px;
+}
