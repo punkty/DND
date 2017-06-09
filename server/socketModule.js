@@ -13,3 +13,5 @@ function socketModule(io) {
 
     })
 }
+
+module.exports = socketModule
