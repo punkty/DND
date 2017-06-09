@@ -38,8 +38,13 @@ h1,label,p {
     margin: 3px 5px;
 }
 .charName {
-    color: gold;
-    
+    color: gold;  
+}
+.hpButton {
+    width: 100%;
+    font-size: 1em;
+    color: #fffff0;
+    background-color: #0e0e0e;
 }
 .mod {
     display: block;
