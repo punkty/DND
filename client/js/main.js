@@ -21,6 +21,7 @@ function Player(){
         animateHealthBar(this)
         healthDisplay = document.querySelector(`span[data-index="${this.id}"]`)
         healthDisplay.textContent = `${this.health}`
+        this.initiativeElement.textContent = `Initiative: ${this.initiative}`
     }
     this.hpUp = () => {
         this.health += 1
@@ -99,12 +100,13 @@ function Player(){
 
         // Armor Class
         let cardInitiative = document.createElement('p')
+        this.initiativeElement = cardInitiative
         cardInitiative.textContent = `Initiative: ${this.initiative}`
         heroCard.appendChild(cardInitiative)
         
         // Create and add initiative hero form
         let initiativeForm = document.createElement('form')
-        initiativeForm.setAttribute('id','initiativeForm')
+        initiativeForm.classList.add('initiativeForm')
 
         let initiativeInput = document.createElement('input')
         initiativeInput.setAttribute('type', 'number')
@@ -116,6 +118,13 @@ function Player(){
         // Submit and input field for new initiative
         let submitInitiativeButton = document.createElement('button')
         submitInitiativeButton.textContent = "Submit"
+
+        submitInitiativeButton.addEventListener('click', function(){
+            this.initiative = this.initiativeInput.value
+            this.initiativeInput.value = ""
+            sendUpdate()
+            this.updateCard()
+        }.bind(this))
         heroCard.appendChild(submitInitiativeButton)
         // Create and add delete button to card
         let deleteButton = document.createElement('button')
