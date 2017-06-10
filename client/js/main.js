@@ -9,43 +9,128 @@ function Player(){
     this.maxHealth
     this.armorClass
     this.initiative
+    this.updateAttributes = charData => {
+        this.portraitSrc = charData.portraitSrc
+        this.name = charData.name
+        this.health = charData.health
+        this.maxHealth = charData.maxHealth
+        this.armorClass = charData.armorClass
+        this.initiative = charData.initiative
+    }
+    this.updateCard = () => {
+        healthDisplay = document.querySelector(`span[data-index="${this.id}"]`)
+        healthDisplay.textContent = `${this.health}`
+    }
     this.hpUp = () => {
         this.health += 1
         healthDisplay = document.querySelector(`span[data-index="${this.id}"]`)
         healthDisplay.textContent = `${this.health}`
+        sendUpdate()
     }
     this.hpDown = () => {
         this.health -= 1
         healthDisplay = document.querySelector(`span[data-index="${this.id}"]`)
         healthDisplay.textContent = `${this.health}`
+        sendUpdate()
+    }
+    this.setup = () => {
+        // Create new character card with styling class
+        let heroCard = document.createElement('section')
+        heroCard.classList.add('character')
+        heroCard.setAttribute('data-index', this.id)
+
+        // Create and add randomly generated portrait to card
+        let cardPortrait = document.createElement('img')
+        cardPortrait.src = this.portraitSrc
+        cardPortrait.alt = this.name
+        heroCard.appendChild(cardPortrait)
+
+        // Create and add hero name to card
+        let cardName = document.createElement('p')
+        cardName.classList.add('charName')
+        cardName.textContent = this.name
+        heroCard.appendChild(cardName)
+
+        let cardHealth = document.createElement('span')
+        cardHealth.setAttribute('data-index', this.id)
+
+        let cardMaxHealth = document.createElement('span')
+        cardHealth.setAttribute('data-index', this.id)
+
+        this.healthElement = cardHealth
+        this.maxHealthElement = cardMaxHealth
+
+        cardHealth.textContent = this.health
+        cardMaxHealth.textContent = ` / ${this.maxHealth}`
+        
+        let healthContainer = document.createElement('p')
+        healthContainer.appendChild(cardHealth)
+        // healthContainer.textContent +=  " / " + hero.maxHealth
+        healthContainer.appendChild(cardMaxHealth)
+
+        // Create and add HP buttons to card
+        let hpUpButton = document.createElement('button')
+        hpUpButton.textContent = "+"
+        hpUpButton.classList.add('hpButton')
+        hpUpButton.addEventListener('click', this.hpUp.bind(this))
+        heroCard.appendChild(hpUpButton);
+        heroCard.appendChild(healthContainer)
+
+        let hpDownButton = document.createElement('button')
+        hpDownButton.classList.add('hpButton')
+        hpDownButton.textContent = "-"
+        hpDownButton.classList.add('hpButton')
+        hpDownButton.addEventListener('click', this.hpDown.bind(this))
+        heroCard.appendChild(hpDownButton)
+        // console.log(heroCard)
+        // charList.insertAdjacentHTML("beforebegin", heroCard)
+        charList.appendChild(heroCard)
+        currCharacters.push(this)
+        uniqueId += 1
     }
 }
 
 function updateRecieved(data){
-    console.log(data)
+    if(!data){return}
+    data.forEach(charData => {
+        const match = currCharacters.find(character => character.id == charData.id)
+        if(!match){
+            playerFromData(charData)
+        } else {
+            match.health = charData.health
+            match.updateCard()
+        }
+    })
 }
 
 function fillForm(){
     form.elements[0].value = "Test"
     form.elements[1].value = 20
-    form.elements[2].value = 15
-    form.elements[3].value = randomInt(1,20)
+    form.elements[2].value = 20
+    form.elements[3].value = 15
+    form.elements[4].value = randomInt(1,20)
+}
+
+function playerFromData(charData){
+    let hero = new Player()
+    hero.updateAttributes(charData)
+    hero.id = uniqueId
+    hero.setup()
 }
 
 function addPlayer(){
     let hero = new Player()
     if(!form.elements[0].value ||!form.elements[1].value || !form.elements[2].value || !form.elements[3].value){ return }
-    let portrait
     if(form.elements[0].value == "MONSTERS"){
-        portrait = "img/1.bmp"
+        hero.portraitSrc = "img/1.bmp"
     } else {
-        portrait =  `img/${randomInt(2,40)}.bmp`
+        hero.portraitSrc =  `img/${randomInt(2,40)}.bmp`
     }
     hero.name = form.elements[0].value
     hero.health = Number(form.elements[1].value)
-    hero.maxHealth = Number(form.elements[1].value)
-    hero.armorClass = Number(form.elements[2].value)
-    hero.initiative = Number(form.elements[3].value)
+    hero.maxHealth = Number(form.elements[2].value)
+    hero.armorClass = Number(form.elements[3].value)
+    hero.initiative = Number(form.elements[4].value)
     hero.id = uniqueId
     // let heroCard = `
     //     <section class="character">
@@ -59,63 +144,9 @@ function addPlayer(){
     //         <button>Delete</button>
     //     </section>
     // `
-
-
-    // Create new character card with styling class
-    let heroCard = document.createElement('section')
-    heroCard.classList.add('character')
-    heroCard.setAttribute('data-index', hero.id)
-
-    // Create and add randomly generated portrait to card
-    let cardPortrait = document.createElement('img')
-    cardPortrait.src = portrait
-    cardPortrait.alt = hero.name
-    heroCard.appendChild(cardPortrait)
-
-    // Create and add hero name to card
-    let cardName = document.createElement('p')
-    cardName.classList.add('charName')
-    cardName.textContent = hero.name
-    heroCard.appendChild(cardName)
-
-    let cardHealth = document.createElement('span')
-    cardHealth.setAttribute('data-index', hero.id)
-
-    let cardMaxHealth = document.createElement('span')
-    cardHealth.setAttribute('data-index', hero.id)
-
-    hero.healthElement = cardHealth
-    hero.maxHealthElement = cardMaxHealth
-
-    cardHealth.textContent = hero.health
-    cardMaxHealth.textContent = ` / ${hero.maxHealth}`
-    
-    let healthContainer = document.createElement('p')
-    healthContainer.appendChild(cardHealth)
-    // healthContainer.textContent +=  " / " + hero.maxHealth
-    healthContainer.appendChild(cardMaxHealth)
-
-    // Create and add HP buttons to card
-    let hpUpButton = document.createElement('button')
-    hpUpButton.textContent = "+"
-    hpUpButton.classList.add('hpButton')
-    hpUpButton.addEventListener('click', hero.hpUp.bind(hero))
-    heroCard.appendChild(hpUpButton);
-    heroCard.appendChild(healthContainer)
-
-    let hpDownButton = document.createElement('button')
-    hpDownButton.classList.add('hpButton')
-    hpDownButton.textContent = "-"
-    hpDownButton.classList.add('hpButton')
-    hpDownButton.addEventListener('click', hero.hpDown.bind(hero))
-    heroCard.appendChild(hpDownButton)
-    // console.log(heroCard)
-    // charList.insertAdjacentHTML("beforebegin", heroCard)
-    charList.appendChild(heroCard)
-    currCharacters.push(hero)
+    hero.setup()
     form.reset()
-    uniqueId += 1
-    // console.log(currCharacters)
+    sendUpdate()
 }
 
 

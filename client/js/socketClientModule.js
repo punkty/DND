@@ -1,7 +1,19 @@
-const socket = socketio.connect()
+const socket = io.connect()
 
 socket.on('update', updateRecieved)
 
-function sendUpdate(data){
-    socket.emit('update', data)
+function sendUpdate(){
+    const charValues = []
+    currCharacters.forEach(character =>{
+        const charData = {}
+        charData.id = character.id
+        charData.portraitSrc = character.portraitSrc
+        charData.name = character.name
+        charData.health = character.health
+        charData.maxHealth = character.maxHealth
+        charData.armorClass = character.armorClass
+        charData.initiative = character.initiative
+        charValues.push(charData)
+    })
+    socket.emit('update', charValues)
 }
