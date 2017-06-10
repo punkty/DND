@@ -34,6 +34,17 @@ h1,label,p {
     display: inline-block;
     border: solid snow 1px;
 }
+.portrait-container {
+    position: relative;
+    height: 170px;
+}
+.health-bar {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: rgba(255,0,0,.5);
+    transition: 0.25s ease-out height;
+}
 .character > p {
     margin: 3px 5px;
 }
