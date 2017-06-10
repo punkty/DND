@@ -46,8 +46,9 @@ h1,label,p {
     color: #fffff0;
     background-color: #0e0e0e;
 }
-.mod {
+.initInput {
     display: block;
-    width: 90px;
-    margin: 2px 8px;
+    width: 96px;
+    margin: 2px 5px;
+    text-align: center;
 }

@@ -1,5 +1,5 @@
 let charList = document.querySelector('.charList') 
-let form = document.getElementById("addPlayerForm")
+let addPlayerForm = document.getElementById("addPlayerForm")
 let currCharacters = []
 let UID = new ABCid()
 
@@ -92,6 +92,17 @@ function Player(){
         cardInitiative.textContent = `Initiative: ${this.initiative}`
         heroCard.appendChild(cardInitiative)
         
+        // Create and add initiative hero form
+        let initiativeForm = document.createElement('form')
+        initiativeForm.setAttribute('id','initiativeForm')
+
+        let initiativeInput = document.createElement('input')
+        initiativeInput.setAttribute('type', 'number')
+        initiativeInput.classList.add('initInput')
+        this.initiativeInput = initiativeInput
+        initiativeForm.appendChild(initiativeInput)
+        heroCard.appendChild(initiativeForm)
+
         // Submit and input field for new initiative
         let submitInitiativeButton = document.createElement('button')
         submitInitiativeButton.textContent = "Submit"
@@ -100,8 +111,6 @@ function Player(){
         let deleteButton = document.createElement('button')
         deleteButton.textContent = "Delete"
         heroCard.appendChild(deleteButton)
-
-
     //         <p>Initiative: ${hero.initiative}</p>
         // console.log(heroCard)
         // charList.insertAdjacentHTML("beforebegin", heroCard)
@@ -126,11 +135,11 @@ function updateRecieved(data){
 }
 
 function fillForm(){
-    form.elements[0].value = "Test"
-    form.elements[1].value = 20
-    form.elements[2].value = 20
-    form.elements[3].value = 15
-    form.elements[4].value = randomInt(1,20)
+    addPlayerForm.elements[0].value = "Test"
+    addPlayerForm.elements[1].value = 20
+    addPlayerForm.elements[2].value = 20
+    addPlayerForm.elements[3].value = 15
+    addPlayerForm.elements[4].value = randomInt(1,20)
 }
 
 function playerFromData(charData){
@@ -142,18 +151,18 @@ function playerFromData(charData){
 
 function addPlayer(){
     let hero = new Player()
-    if(!form.elements[0].value ||!form.elements[1].value || !form.elements[2].value || !form.elements[3].value){ return }
-    if(form.elements[0].value == "MONSTERS"){
+    if(!addPlayerForm.elements[0].value ||!addPlayerForm.elements[1].value || !addPlayerForm.elements[2].value || !addPlayerForm.elements[3].value){ return }
+    if(addPlayerForm.elements[0].value == "MONSTERS"){
         hero.portraitSrc = "img/1.bmp"
     } else {
         hero.portraitSrc =  `img/${randomInt(2,40)}.bmp`
     }
     hero.id = UID.generate()
-    hero.name = form.elements[0].value
-    hero.health = Number(form.elements[1].value)
-    hero.maxHealth = Number(form.elements[2].value)
-    hero.armorClass = Number(form.elements[3].value)
-    hero.initiative = Number(form.elements[4].value)
+    hero.name = addPlayerForm.elements[0].value
+    hero.health = Number(addPlayerForm.elements[1].value)
+    hero.maxHealth = Number(addPlayerForm.elements[2].value)
+    hero.armorClass = Number(addPlayerForm.elements[3].value)
+    hero.initiative = Number(addPlayerForm.elements[4].value)
     // let heroCard = `
     //     <section class="character">
     //         <img src='${portrait}' alt="${hero.name}"/>
@@ -167,7 +176,7 @@ function addPlayer(){
     //     </section>
     // `
     hero.setup()
-    form.reset()
+    addPlayerForm.reset()
     sendUpdate()
 }
 
