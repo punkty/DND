@@ -1,7 +1,7 @@
 let charList = document.querySelector('.charList') 
 let form = document.getElementById("addPlayerForm")
 let currCharacters = []
-let uniqueId = 0
+let UID = new ABCid()
 
 function Player(){
     this.name
@@ -82,11 +82,32 @@ function Player(){
         hpDownButton.classList.add('hpButton')
         hpDownButton.addEventListener('click', this.hpDown.bind(this))
         heroCard.appendChild(hpDownButton)
+
+        let cardAC = document.createElement('p')
+        cardAC.textContent = `AC: ${this.armorClass}`
+        heroCard.appendChild(cardAC)
+
+        // Armor Class
+        let cardInitiative = document.createElement('p')
+        cardInitiative.textContent = `Initiative: ${this.initiative}`
+        heroCard.appendChild(cardInitiative)
+        
+        // Submit and input field for new initiative
+        let submitInitiativeButton = document.createElement('button')
+        submitInitiativeButton.textContent = "Submit"
+        herocard.appendChild(submitInitiativeButton)
+        // Create and add delete button to card
+        let deleteButton = document.createElement('button')
+        deteleButton.textContent = "Delete"
+        heroCard.appendChild(deleteButton)
+
+
+    //         <p>Initiative: ${hero.initiative}</p>
         // console.log(heroCard)
         // charList.insertAdjacentHTML("beforebegin", heroCard)
         charList.appendChild(heroCard)
         currCharacters.push(this)
-        uniqueId += 1
+        
     }
 }
 
@@ -96,8 +117,9 @@ function updateRecieved(data){
         const match = currCharacters.find(character => character.id == charData.id)
         if(!match){
             playerFromData(charData)
+            UID.add(charData.id)
         } else {
-            match.health = charData.health
+            match.updateAttributes(charData)
             match.updateCard()
         }
     })
@@ -114,7 +136,6 @@ function fillForm(){
 function playerFromData(charData){
     let hero = new Player()
     hero.updateAttributes(charData)
-    hero.id = uniqueId
     hero.setup()
 }
 
@@ -126,12 +147,12 @@ function addPlayer(){
     } else {
         hero.portraitSrc =  `img/${randomInt(2,40)}.bmp`
     }
+    hero.id = UID.generate()
     hero.name = form.elements[0].value
     hero.health = Number(form.elements[1].value)
     hero.maxHealth = Number(form.elements[2].value)
     hero.armorClass = Number(form.elements[3].value)
     hero.initiative = Number(form.elements[4].value)
-    hero.id = uniqueId
     // let heroCard = `
     //     <section class="character">
     //         <img src='${portrait}' alt="${hero.name}"/>
@@ -149,7 +170,3 @@ function addPlayer(){
     sendUpdate()
 }
 
-
-function randomInt(min, max) {
-  return Math.floor(Math.random() * (max - min)) + min
-}
