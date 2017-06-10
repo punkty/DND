@@ -95,10 +95,10 @@ function Player(){
         // Submit and input field for new initiative
         let submitInitiativeButton = document.createElement('button')
         submitInitiativeButton.textContent = "Submit"
-        herocard.appendChild(submitInitiativeButton)
+        heroCard.appendChild(submitInitiativeButton)
         // Create and add delete button to card
         let deleteButton = document.createElement('button')
-        deteleButton.textContent = "Delete"
+        deleteButton.textContent = "Delete"
         heroCard.appendChild(deleteButton)
 
 
