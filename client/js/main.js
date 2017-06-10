@@ -18,19 +18,18 @@ function Player(){
         this.initiative = charData.initiative
     }
     this.updateCard = () => {
+        animateHealthBar(this)
         healthDisplay = document.querySelector(`span[data-index="${this.id}"]`)
         healthDisplay.textContent = `${this.health}`
     }
     this.hpUp = () => {
         this.health += 1
-        healthDisplay = document.querySelector(`span[data-index="${this.id}"]`)
-        healthDisplay.textContent = `${this.health}`
+        this.updateCard()
         sendUpdate()
     }
     this.hpDown = () => {
         this.health -= 1
-        healthDisplay = document.querySelector(`span[data-index="${this.id}"]`)
-        healthDisplay.textContent = `${this.health}`
+        this.updateCard()
         sendUpdate()
     }
     this.setup = () => {
@@ -39,11 +38,22 @@ function Player(){
         heroCard.classList.add('character')
         heroCard.setAttribute('data-index', this.id)
 
+        let portraitContainer = document.createElement('div')
+        portraitContainer.classList.add('portrait-container')
+        heroCard.appendChild(portraitContainer)
+
         // Create and add randomly generated portrait to card
         let cardPortrait = document.createElement('img')
         cardPortrait.src = this.portraitSrc
         cardPortrait.alt = this.name
-        heroCard.appendChild(cardPortrait)
+        portraitContainer.appendChild(cardPortrait)
+
+        // Create health bar
+        let healthBar = document.createElement('div')
+        healthBar.classList.add('health-bar')
+        this.healthBarElement = healthBar
+        portraitContainer.appendChild(healthBar)
+        animateHealthBar(this)
 
         // Create and add hero name to card
         let cardName = document.createElement('p')
