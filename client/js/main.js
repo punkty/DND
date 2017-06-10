@@ -32,11 +32,17 @@ function Player(){
         this.updateCard()
         sendUpdate()
     }
+    this.delete = () => {
+        currCharacters.splice(currCharacters.indexOf(this),1)
+        this.cardElement.parentNode.removeChild(this.cardElement)
+        sendUpdate()
+    }
     this.setup = () => {
         // Create new character card with styling class
         let heroCard = document.createElement('section')
         heroCard.classList.add('character')
         heroCard.setAttribute('data-index', this.id)
+        this.cardElement = heroCard
 
         let portraitContainer = document.createElement('div')
         portraitContainer.classList.add('portrait-container')
@@ -120,6 +126,7 @@ function Player(){
         // Create and add delete button to card
         let deleteButton = document.createElement('button')
         deleteButton.textContent = "Delete"
+        deleteButton.addEventListener('click', this.delete.bind(this))
         heroCard.appendChild(deleteButton)
     //         <p>Initiative: ${hero.initiative}</p>
         // console.log(heroCard)
@@ -132,6 +139,7 @@ function Player(){
 
 function updateRecieved(data){
     if(!data){return}
+    const found = []
     data.forEach(charData => {
         const match = currCharacters.find(character => character.id == charData.id)
         if(!match){
@@ -141,7 +149,14 @@ function updateRecieved(data){
             match.updateAttributes(charData)
             match.updateCard()
         }
+        found.push(charData.id)
     })
+    for (let i = currCharacters.length-1; i >= 0; i--) {
+        const character = currCharacters[i]
+        if (character && !found.includes(character.id)) {
+            character.delete()
+        }
+    }
 }
 
 function fillForm(){
