@@ -137,9 +137,6 @@ function Player(){
         deleteButton.textContent = "Delete"
         deleteButton.addEventListener('click', this.delete.bind(this))
         heroCard.appendChild(deleteButton)
-    //         <p>Initiative: ${hero.initiative}</p>
-        // console.log(heroCard)
-        // charList.insertAdjacentHTML("beforebegin", heroCard)
         charList.appendChild(heroCard)
         currCharacters.push(this)
         
@@ -197,18 +194,6 @@ function addPlayer(){
     hero.maxHealth = Number(addPlayerForm.elements[2].value)
     hero.armorClass = Number(addPlayerForm.elements[3].value)
     hero.initiative = Number(addPlayerForm.elements[4].value)
-    // let heroCard = `
-    //     <section class="character">
-    //         <img src='${portrait}' alt="${hero.name}"/>
-    //         <p class="charName">${hero.name}</p>
-    //         <button onclick="currCharacters[${hero.index}].hpUp()" class="hpButton">+</button><p>HP: <span data-index="${hero.index}">${hero.health}</span> / ${hero.maxHealth}</p><button onclick="currCharacters[${hero.index}].hpDown(${hero.index})" class="hpButton">-</button>
-    //         <p>AC: ${hero.armorClass}</p>
-    //         <p>Initiative: ${hero.initiative}</p>
-    //         <input type="number" name="mod" class="mod"/>
-    //         <button>Re-roll</button>
-    //         <button>Delete</button>
-    //     </section>
-    // `
     hero.setup()
     addPlayerForm.reset()
     sendUpdate()
