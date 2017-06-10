@@ -135,6 +135,7 @@ function fillForm(){
 
 function playerFromData(charData){
     let hero = new Player()
+    hero.id = charData.id
     hero.updateAttributes(charData)
     hero.setup()
 }
