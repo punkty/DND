@@ -42,7 +42,7 @@ h1,label,p {
     position: absolute;
     bottom: 0;
     width: 100%;
-    background: rgba(255,0,0,.5);
+    background: rgba(190,0,0,.5);
     transition: 0.25s ease-out height;
 }
 .character > p {
