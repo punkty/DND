@@ -13,6 +13,8 @@ function sendUpdate(){
         charData.maxHealth = character.maxHealth
         charData.armorClass = character.armorClass
         charData.initiative = character.initiative
+        charData.tempInitiative = character.tempInitiative
+        charData.isDupe = character.isDupe
         charValues.push(charData)
     })
     socket.emit('update', charValues)

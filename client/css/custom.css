@@ -33,6 +33,7 @@ h1,label,p {
 .character {
     display: inline-block;
     border: solid snow 1px;
+    transition: 0.3s ease background;
 }
 .portrait-container {
     position: relative;
@@ -62,4 +63,7 @@ h1,label,p {
     width: 96px;
     margin: 2px 5px;
     text-align: center;
+}
+.character.dupe {
+    background: crimson;
 }

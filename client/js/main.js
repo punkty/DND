@@ -9,6 +9,7 @@ function Player(){
     this.maxHealth
     this.armorClass
     this.initiative
+    this.isDupe = false
     this.updateAttributes = charData => {
         this.portraitSrc = charData.portraitSrc
         this.name = charData.name
@@ -16,12 +17,22 @@ function Player(){
         this.maxHealth = charData.maxHealth
         this.armorClass = charData.armorClass
         this.initiative = charData.initiative
+        this.isDupe = charData.isDupe
+        this.tempInitiative = this.initiative
     }
     this.updateCard = () => {
         animateHealthBar(this)
+        if (this.isDupe) {
+            this.cardElement.classList.add('dupe')
+            console.log('ypyoyooyyo')
+        } else {
+            this.cardElement.classList.remove('dupe')
+            console.log('nononoononononon')
+        }
         healthDisplay = document.querySelector(`span[data-index="${this.id}"]`)
         healthDisplay.textContent = `${this.health}`
-        this.initiativeElement.textContent = `Initiative: ${this.initiative}`
+        // this.initiativeElement.textContent = `Initiative: ${this.initiative}`
+        this.initiativeElement.textContent = `Initiative: ${this.tempInitiative}`
     }
     this.hpUp = () => {
         this.health += 1
@@ -126,7 +137,11 @@ function Player(){
         submitInitiativeButton.textContent = "Submit"
 
         submitInitiativeButton.addEventListener('click', function(){
-            this.initiative = this.initiativeInput.value
+            const initiative = Number(this.initiativeInput.value)
+            if (firstSort) {
+                this.initiative = initiative
+            }
+            this.tempInitiative = initiative
             this.initiativeInput.value = ""
             sendUpdate()
             this.updateCard()
@@ -142,7 +157,7 @@ function Player(){
         // charList.insertAdjacentHTML("beforebegin", heroCard)
         charList.appendChild(heroCard)
         currCharacters.push(this)
-        
+        this.updateCard()
     }
 }
 
@@ -166,6 +181,7 @@ function updateRecieved(data){
             character.delete()
         }
     }
+    sortInitiative(0,currCharacters.length-1)
 }
 
 function fillForm(){
@@ -197,6 +213,7 @@ function addPlayer(){
     hero.maxHealth = Number(addPlayerForm.elements[2].value)
     hero.armorClass = Number(addPlayerForm.elements[3].value)
     hero.initiative = Number(addPlayerForm.elements[4].value)
+    hero.tempInitiative = hero.initiative
     // let heroCard = `
     //     <section class="character">
     //         <img src='${portrait}' alt="${hero.name}"/>
@@ -214,3 +231,10 @@ function addPlayer(){
     sendUpdate()
 }
 
+function updateCharacterOrder() {
+    currCharacters.forEach(char => {
+        char.updateCard()
+        charList.appendChild(char.cardElement)
+    })
+    sendUpdate()
+}
