@@ -1,4 +1,3 @@
-let charList = document.querySelector('.charList') 
 let addPlayerForm = document.getElementById("addPlayerForm")
 let currCharacters = []
 let UID = new ABCid()
@@ -126,8 +125,9 @@ function Player(){
         submitInitiativeButton.textContent = "Submit"
 
         submitInitiativeButton.addEventListener('click', function(){
-            this.initiative = this.initiativeInput.value
+            this.initiative = Number(this.initiativeInput.value)
             this.initiativeInput.value = ""
+            orderCards()
             sendUpdate()
             this.updateCard()
         }.bind(this))
@@ -156,6 +156,9 @@ function updateRecieved(data){
             match.updateCard()
         }
         found.push(charData.id)
+        if(charData.turnCard){
+            createTurnCards()
+        }
     })
     for (let i = currCharacters.length-1; i >= 0; i--) {
         const character = currCharacters[i]
@@ -163,10 +166,12 @@ function updateRecieved(data){
             character.delete()
         }
     }
+
+    orderCards()
 }
 
 function fillForm(){
-    addPlayerForm.elements[0].value = "Test"
+    addPlayerForm.elements[0].value = randomName()
     addPlayerForm.elements[1].value = 20
     addPlayerForm.elements[2].value = 20
     addPlayerForm.elements[3].value = 15
@@ -178,6 +183,14 @@ function playerFromData(charData){
     hero.id = charData.id
     hero.updateAttributes(charData)
     hero.setup()
+}
+function randomName(){
+    let firstNames = ["Jill","Bill","Phil","Stranky","Mooper","Bryit","Andu","Vulf","Victor","Timmy","Wilthas","Ophelia","Pappy","Pamela","Vicki","Coni","Amber","Sara","Leah","Dan","Benjamin","Michelle","Nasim","Luca","Algore","Maloc","Brandon","Doj","Porkle","Pem","Fiaz","Django","Nancy","Sparkle","Grampy","Jack","Glenn","Lars","Berry","Magic","Spider","Taco","Hawaiian","Magnus","Frothgar","Gorlok","The","Ty","Beanbag","Plebby","Mad","Andy","Larry","Karl","Margie","Miguel","Madame","Buzz","Alex","Yung","Bud","Greg","Kukrim","PJ","Alycia","David","Java","Giffy","Ray","Michael","Devon","Json","Liz","Roshawn","Charlie","Leo","Kathleen","Nick","Kai","TJ","Quinten","Sloop","Frobe"]
+    let lastNames = ["People","Buckets","Dustkeeper","Hawkarrow","LoneMane","Boulderbreaker","Ashridge","Bryit","Deathseeker","Mandu","Snowmane","Kingslayer","Swiftfoot","Mountainscream","Moonshadow","Voidstrider","Moonthorn","Grandcrest","Stinkz","Rhythms","Pem","Ponies","Darksider","Saltshaker","Riverchaser","Wyvernbeard","Treegazer","Fogbinder","Dragonblood","Dawncrest","WildShard","Bronzefist","Shieldbearer","Gangletoes","FizzBuzz","Donglegoblin","Cloudstriker","Goodbrancher","Bluejeans","Coffee","Brian","Ben","the Pleb","Bingo","the Squillzord","the Forgotten","Choi","MacArver","Getsit","Button","Mongod","Swapi","John B","the Warrior","the Mage","the Thief","Bryant"]
+    
+    const num1 = randomInt(0, firstNames.length - 1)
+    const num2 = randomInt(0, lastNames.length - 1)
+    return `${firstNames[num1]} ${lastNames[num2]}`
 }
 
 function addPlayer(){
@@ -196,6 +209,7 @@ function addPlayer(){
     hero.initiative = Number(addPlayerForm.elements[4].value)
     hero.setup()
     addPlayerForm.reset()
+    orderCards()
     sendUpdate()
 }
 

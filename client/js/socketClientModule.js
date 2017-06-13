@@ -13,7 +13,10 @@ function sendUpdate(){
         charData.maxHealth = character.maxHealth
         charData.armorClass = character.armorClass
         charData.initiative = character.initiative
+        charData.turnCard = character.turnCard
         charValues.push(charData)
     })
     socket.emit('update', charValues)
+
+
 }
