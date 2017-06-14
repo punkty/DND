@@ -10,29 +10,29 @@
     </head>
     <body>
         <main>
-            <section>
-            <h1>Battle Queue</h1>
-            <form id="addPlayerForm">
-                <label for="charName">Name</label>
-                <input type="text" name="charName">
-                <label for="health">Health</label>
-                <input type="number" name="health">
-                <label for="maxHealth">Max Health</label>
-                <input type="number" name="maxHealth">
-                <label for="armorClass">Armor Class</label>
-                <input type="number" name="armorClass">
-                <label for="roll">Initiative</label>
-                <input type="number" name="initiative">
-            </form>
-            <button onclick="fillForm()">Test</button>
-            <button onclick="addPlayer()">Add Player</button>
-            <button onclick="battleQueue()">Queue for Battle</button>
+            <section class="bqConsole">
+                <section class="charList">
+                <!-- Characters show here -->
+                </section>
+                <h1>Battle Queue</h1>
+                <form id="addPlayerForm">
+                    <label for="charName">Name</label>
+                    <input type="text" name="charName">
+                    <label for="health">Health</label>
+                    <input type="number" name="health">
+                    <label for="maxHealth">Max Health</label>
+                    <input type="number" name="maxHealth">
+                    <label for="armorClass">Armor Class</label>
+                    <input type="number" name="armorClass">
+                    <label for="roll">Initiative</label>
+                    <input type="number" name="initiative">
+                </form>
+                <button onclick="fillForm()">Test</button>
+                <button onclick="addPlayer()">Add Player</button>
+                <button onclick="battleQueue()">Queue for Battle</button>
             </section>
             <section class="turnCards">
                 <!-- Turn cards show here -->
-            </section>
-            <section class="charList">
-                <!-- Characters show here -->
             </section>
         </main>
     </body>

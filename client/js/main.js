@@ -1,5 +1,6 @@
 let addPlayerForm = document.getElementById("addPlayerForm")
 let currCharacters = []
+let TurnCards = []
 let UID = new ABCid()
 
 function Player(){
@@ -143,10 +144,10 @@ function Player(){
     }
 }
 
-function updateRecieved(data){
-    if(!data){return}
+function updateRecieved(updatePkg){
+    if(!updatePkg){return}
     const found = []
-    data.forEach(charData => {
+    updatePkg.charValues.forEach(charData => {
         const match = currCharacters.find(character => character.id == charData.id)
         if(!match){
             playerFromData(charData)
@@ -156,9 +157,6 @@ function updateRecieved(data){
             match.updateCard()
         }
         found.push(charData.id)
-        if(charData.turnCard){
-            createTurnCards()
-        }
     })
     for (let i = currCharacters.length-1; i >= 0; i--) {
         const character = currCharacters[i]
@@ -166,9 +164,69 @@ function updateRecieved(data){
             character.delete()
         }
     }
-
     orderCards()
 }
+
+// Turn Card functions
+
+function turnCardsRecieved(){
+    console.log('recieved turnCard signal')
+    createTurnCards()
+}
+
+function turnUpdateRecieved(data){
+    if(!data){return}
+    currTurnCard = document.querySelector('turnCard')
+    turnCards.appendChild(currTurnCard)
+}
+
+let charList = document.querySelector('.charList')
+let turnCards = document.querySelector('.turnCards')
+
+function battleQueue(){
+    createTurnCards()
+    sendTurnCards()
+}
+
+function takeTurn(){
+    currTurnCard = document.querySelector('.turnCard')
+    turnCards.appendChild(currTurnCard)
+}
+function createTurnCards(){
+    if(turnCards.children.length > 0){
+        turnCards.innerHTML = ""
+    }
+    currCharacters.forEach(character => {
+        turnCardSetup(character)
+    })
+}
+
+function turnCardSetup(character){
+        let turnCard = document.createElement('section')
+        turnCard.classList.add('turnCard')
+
+        turnCard.addEventListener('click', function(){
+            takeTurn()
+            sendTurnUpdate()
+        })
+
+        let turnCardName = document.createElement('h4')
+        turnCardName.textContent = character.name
+        turnCard.appendChild(turnCardName)
+        character.turnCard = turnCard
+        TurnCards.push(turnCard)
+        turnCards.appendChild(turnCard)
+}
+
+function tcRecieved(charNameArr){
+    createTurnCards()
+}
+
+function turnUpdateRecieved(charNameArr){
+    takeTurn()
+}
+
+// End of Turn Card functions
 
 function fillForm(){
     addPlayerForm.elements[0].value = randomName()

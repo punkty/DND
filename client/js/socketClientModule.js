@@ -1,10 +1,13 @@
 const socket = io.connect()
 
 socket.on('update', updateRecieved)
+socket.on('createTC', tcRecieved)
+socket.on('turnUpdate', turnUpdateRecieved)
 
 function sendUpdate(){
-    const charValues = []
-    currCharacters.forEach(character =>{
+    const updatePkg = {}
+    updatePkg.charValues = []
+    currCharacters.forEach(character => {
         const charData = {}
         charData.id = character.id
         charData.portraitSrc = character.portraitSrc
@@ -14,9 +17,21 @@ function sendUpdate(){
         charData.armorClass = character.armorClass
         charData.initiative = character.initiative
         charData.turnCard = character.turnCard
-        charValues.push(charData)
+        updatePkg.charValues.push(charData)
     })
-    socket.emit('update', charValues)
+    socket.emit('update', updatePkg)
 
+}
 
+function sendTurnCards(){
+    turnCardPkg = {}
+    turnCardPkg.cards = []
+    currCharacters.forEach(character => {
+        turnCardPkg.cards.push(character.name)
+    })
+    socket.emit('createTC')
+}
+
+function sendTurnUpdate(){
+    socket.emit('turnUpdate')
 }
